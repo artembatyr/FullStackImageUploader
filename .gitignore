@@ -1,0 +1,27 @@
+# Ignore database data
+.dbdata/
+
+# Ignore Python-related files
+dicom-images-backend/__pycache__/
+dicom-images-backend/*.pyc
+dicom-images-backend/*.pyo
+dicom-images-backend/.env
+dicom-images-backend/.venv
+dicom-images-backend/media
+
+# Ignore Django migrations cache (optional)
+dicom-images-backend/migrations/__pycache__/
+dicom-images-backend/migrations/*.pyc
+
+# Ignore node_modules and build files
+dicom-images-frontend/node_modules/
+dicom-images-frontend/.next/
+dicom-images-frontend/.env.local
+dicom-images-frontend/.parcel-cache
+dicom-images-frontend/.turbo
+dicom-images-frontend/dist/
+
+# Ignore Docker-related files
+**/__pycache__/
+docker-compose.override.yml
+*.log

@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  dicom-images-backend:
+    container_name: dicom-back
+    build:
+      context: ./dicom-images-backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./dicom-images-backend:/app
+    ports:
+      - "8000:8000"
+    entrypoint: ["/app/wait-for-db.sh"]
+    command: >
+      sh -c "python manage.py migrate && 
+            python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      dicom-images-db:
+        condition: service_healthy
+    environment:
+      - DJANGO_SETTINGS_MODULE=dicom.settings
+
+  dicom-images-frontend:
+    container_name: dicom-front
+    build:
+      context: ./dicom-images-frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./dicom-images-frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      -  dicom-images-backend
+
+  dicom-images-db:
+    container_name: django-dicom-images-db
+    image: mysql:5.7.22
+    restart: always
+    environment:
+      MYSQL_DATABASE: dicom_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    volumes: 
+      - .dbdata:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/my.cnf 
+    ports:
+      - 33066:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 5
