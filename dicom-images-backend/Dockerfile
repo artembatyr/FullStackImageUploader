@@ -3,6 +3,7 @@ FROM python:3.10.11
 ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 COPY requirements.txt /app/requirements.txt
+# COPY wait-for-db.sh /app/wait-for-db.sh
 RUN pip install -r requirements.txt
 RUN apt-get update && apt-get install -y netcat
 COPY . /app
