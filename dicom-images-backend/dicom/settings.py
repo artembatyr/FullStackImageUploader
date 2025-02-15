@@ -15,14 +15,11 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+if not SECRET_KEY:
+    raise ValueError("Missing DJANGO_SECRET_KEY environment variable")
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7-pa(k_4+01&_s0zi2u44-kxsf+1@tf3a2micbhwc9wph6sisa'
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -85,15 +82,14 @@ WSGI_APPLICATION = 'dicom.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dicom_db',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'dicom-images-db',
-        'PORT': '3306'
+        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.mysql'),
+        'NAME': os.getenv('MYSQL_DATABASE', 'dicom_db'),
+        'USER': os.getenv('MYSQL_USER', 'root'),
+        'PASSWORD': os.getenv('MYSQL_PASSWORD', 'root'),
+        'HOST': os.getenv('DB_HOST', 'dicom-images-db'),
+        'PORT': os.getenv('DB_PORT', '3306')
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -126,22 +122,13 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
 STATIC_URL = 'static/'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
 
 CORS_ALLOW_ALL_ORIGINS = True 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000",
-# ]
 
 CSRF_COOKIE_SECURE = False
 
@@ -149,7 +136,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
 ]
 
-CORS_ALLOW_CREDENTIALS = True  # Allow cookies & auth
+CORS_ALLOW_CREDENTIALS = True 
 SECURE_SSL_REDIRECT = False
 SECURE_PROXY_SSL_HEADER = None
 SECURE_HTTP_ONLY = False

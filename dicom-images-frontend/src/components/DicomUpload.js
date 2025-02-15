@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Box, Typography } from "@mui/material";
 import axios from "axios";
 
-const DicomUpload = () => {
+const DicomUpload = ({ refetch }) => {
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
 
@@ -18,11 +18,12 @@ const DicomUpload = () => {
 
     const formData = new FormData();
     formData.append("file", file);
-
+    console.log('difference', formData, 'and', file)
     try {
-      const response = await axios.post("http://localhost:8000/api/upload", formData, {
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      refetch();
       setMessage("Upload successful!");
       console.log(response.data);
     } catch (error) {

@@ -1,21 +1,7 @@
 import React, { useState } from "react";
-import { useQuery, gql } from "@apollo/client";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Modal, Box } from "@mui/material";
 
-const GET_DICOM_FILES = gql`
-  query {
-    dicomFiles {
-      id
-      patientName
-      patientBirthDate
-      seriesDescription
-      file
-    }
-  }
-`;
-
-const DicomTable = () => {
-  const { loading, error, data } = useQuery(GET_DICOM_FILES);
+const DicomTable = ({ loading, error, data }) => {
   const [openModal, setOpenModal] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
 
@@ -24,7 +10,6 @@ const DicomTable = () => {
     setOpenModal(true);
   };
 
-  console.log('imageDataArray', data)
   const handleCloseModal = () => {
     setOpenModal(false);
   };
@@ -53,10 +38,10 @@ const DicomTable = () => {
                 <TableCell>{file.seriesDescription}</TableCell>
                 <TableCell>
                   {/* <Button onClick={() => handlePreviewClick(file.imageUrl)}>Preview</Button> */}
-                  <Button onClick={() => handlePreviewClick(`http://localhost:8000/api/media/dicom_images/${file.id}.png` )}>Preview</Button>
+                  <Button onClick={() => handlePreviewClick(`${process.env.REACT_APP_BACKEND_URL}/api/media/dicom_images/${file.id}.png` )}>Preview</Button>
                 </TableCell>
                 <TableCell>
-                <Button href={'http://localhost:8000/api/media/' + file.file} download>
+                <Button href={`${process.env.REACT_APP_BACKEND_URL}/api/media/` + file.file} download>
                 Download
                   </Button>
                 </TableCell>

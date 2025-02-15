@@ -1,5 +1,6 @@
 # Ignore database data
 .dbdata/
+.env
 
 # Ignore Python-related files
 dicom-images-backend/__pycache__/
@@ -16,7 +17,7 @@ dicom-images-backend/migrations/*.pyc
 # Ignore node_modules and build files
 dicom-images-frontend/node_modules/
 dicom-images-frontend/.next/
-dicom-images-frontend/.env.local
+dicom-images-frontend/.env
 dicom-images-frontend/.parcel-cache
 dicom-images-frontend/.turbo
 dicom-images-frontend/dist/
