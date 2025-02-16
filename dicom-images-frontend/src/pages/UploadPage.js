@@ -1,8 +1,7 @@
 import React from "react";
-import DicomUpload from "./DicomUpload";
-import DicomTable from "./DicomTable";
+import DicomUpload from "../components/DicomUpload";
+import DicomTable from "../components/DicomTable";
 import { useQuery, gql } from "@apollo/client";
-
 
 const GET_DICOM_FILES = gql`
   query {
@@ -16,9 +15,10 @@ const GET_DICOM_FILES = gql`
   }
 `;
 
-const DownloadPage = () => {
-  const { loading, error, data, refetch } = useQuery(GET_DICOM_FILES);
 
+const UploadPage = () => {
+  const { loading, error, data, refetch } = useQuery(GET_DICOM_FILES);
+  
   return (
     <>
         <DicomUpload refetch={refetch} />
@@ -27,4 +27,4 @@ const DownloadPage = () => {
   )
 };
 
-export default DownloadPage;
+export default UploadPage;

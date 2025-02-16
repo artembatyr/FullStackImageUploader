@@ -19,37 +19,41 @@ const DicomTable = ({ loading, error, data }) => {
 
   return (
     <div>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Patient Name</TableCell>
-              <TableCell>Birth Date</TableCell>
-              <TableCell>Series</TableCell>
-              <TableCell>Preview</TableCell>
-              <TableCell>Download</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.dicomFiles.map((file) => (
-              <TableRow key={file.id}>
-                <TableCell>{file.patientName}</TableCell>
-                <TableCell>{file.patientBirthDate}</TableCell>
-                <TableCell>{file.seriesDescription}</TableCell>
-                <TableCell>
-                  {/* <Button onClick={() => handlePreviewClick(file.imageUrl)}>Preview</Button> */}
-                  <Button onClick={() => handlePreviewClick(`${process.env.REACT_APP_BACKEND_URL}/api/media/dicom_images/${file.id}.png` )}>Preview</Button>
-                </TableCell>
-                <TableCell>
-                <Button href={`${process.env.REACT_APP_BACKEND_URL}/api/media/` + file.file} download>
-                Download
-                  </Button>
-                </TableCell>
+      <Box sx={{ maxHeight: "440px", overflowY: "auto" }}>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+              <TableCell>ID</TableCell>
+                <TableCell>Patient Name</TableCell>
+                <TableCell>Birth Date</TableCell>
+                <TableCell>Series</TableCell>
+                <TableCell>Preview</TableCell>
+                <TableCell>Download</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {data.dicomFiles.map((file) => (
+                <TableRow key={file.id}>
+                  <TableCell>{file.id}</TableCell>
+                  <TableCell>{file.patientName}</TableCell>
+                  <TableCell>{file.patientBirthDate}</TableCell>
+                  <TableCell>{file.seriesDescription}</TableCell>
+                  <TableCell>
+                    {/* <Button onClick={() => handlePreviewClick(file.imageUrl)}>Preview</Button> */}
+                    <Button onClick={() => handlePreviewClick(`${process.env.REACT_APP_BACKEND_URL}/api/media/dicom_images/${file.id}.png` )}>Preview</Button>
+                  </TableCell>
+                  <TableCell>
+                  <Button href={`${process.env.REACT_APP_BACKEND_URL}/api/media/` + file.file} download>
+                  Download
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
 
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box

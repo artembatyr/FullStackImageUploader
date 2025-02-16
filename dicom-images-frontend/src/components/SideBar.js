@@ -22,14 +22,14 @@ const SideBar = ({openSideBar}) => {
                 sx={{
                     position: "absolute",
                     top: "64px",
-                    width: 80,
+                    width: 90,
                     flexShrink: 0,
                     zIndex: -10,
                     '& .MuiDrawer-paper': {
                         position: "absolute",
                         top: 0,
                         left: 0,
-                        width: 80,
+                        width: 90,
                         boxSizing: 'border-box',
                     },
                     '& .MuiBackdrop-root': {

@@ -11,7 +11,7 @@ const Header = ({openSideBar, toggleSideBar}) => {
           <IconButton edge="start" color="inherit" sx={{ marginLeft: 0, marginRight: 2 }} onClick={() => toggleSideBar(openSideBar)}>
             <FontAwesomeIcon icon={faBars} />
           </IconButton>
-          <IconButton color="inherit" sx={{ marginRight: 2 }}>
+          <IconButton color="inherit" sx={{ marginLeft: 3 }}>
             <FontAwesomeIcon icon={faLandmark} />
           </IconButton>
 

@@ -4,10 +4,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
 import Header from "./components/Header";
 import Sidebar from "./components/SideBar";
-import DownloadPage from "./components/DownloadPage";
-import UploadPage from "./components/UploadPage";
-import ViewerPage from "./components/ViewerPage";
-import DemoPage from "./components/DemoPage";
+import DownloadPage from "./pages/DownloadPage";
+import UploadPage from "./pages/UploadPage";
+import ViewerPage from "./pages/ViewerPage";
+import DemoPage from "./pages/DemoPage";
 
 function App() {
   const [openSideBar, setOpenSideBar] = useState(true);
