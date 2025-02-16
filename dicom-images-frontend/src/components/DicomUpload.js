@@ -33,7 +33,7 @@ const DicomUpload = ({ refetch }) => {
   };
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box>
       <Typography variant="h5">Upload DICOM File</Typography>
       <input type="file" accept=".dcm" onChange={handleFileChange} />
       <Button variant="contained" color="primary" onClick={handleUpload}>
