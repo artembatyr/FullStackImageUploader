@@ -8,7 +8,6 @@ const Header = ({openSideBar, toggleSideBar}) => {
     <>
       <AppBar position="static" sx={{ backgroundColor: "#235172", padding: "0", zIndex: 10 }}>
         <Toolbar>
-          {/* Left side: Burger menu and Building icon */}
           <IconButton edge="start" color="inherit" sx={{ marginLeft: 0, marginRight: 2 }} onClick={() => toggleSideBar(openSideBar)}>
             <FontAwesomeIcon icon={faBars} />
           </IconButton>
@@ -18,7 +17,6 @@ const Header = ({openSideBar, toggleSideBar}) => {
 
           <Box sx={{ flexGrow: 1 }} />
 
-          {/* Right side: Letter, Bell, and Sign Out */}
           <IconButton color="inherit" sx={{ marginRight: 2 }}>
             <FontAwesomeIcon icon={faEnvelope} />
           </IconButton>

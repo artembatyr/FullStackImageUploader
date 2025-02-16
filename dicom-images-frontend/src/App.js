@@ -1,26 +1,15 @@
 import React, { useState } from "react";
 import { Container, Box } from "@mui/material";
-import { useQuery, gql } from "@apollo/client";
-import DicomUpload from "./components/DicomUpload";
-import DicomTable from "./components/DicomTable";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
 import Header from "./components/Header";
 import Sidebar from "./components/SideBar";
-
-const GET_DICOM_FILES = gql`
-  query {
-    dicomFiles {
-      id
-      patientName
-      patientBirthDate
-      seriesDescription
-      file
-    }
-  }
-`;
+import DownloadPage from "./components/DownloadPage";
+import UploadPage from "./components/UploadPage";
+import ViewerPage from "./components/ViewerPage";
+import DemoPage from "./components/DemoPage";
 
 function App() {
-  const { loading, error, data, refetch } = useQuery(GET_DICOM_FILES);
   const [openSideBar, setOpenSideBar] = useState(true);
 
   const toggleSideBar = (open) => {
@@ -28,14 +17,21 @@ function App() {
   };
 
   return (
-    <Container  sx={{ paddingLeft: { xs: 0, sm: 0 }, paddingRight: { xs: 0, sm: 0 } }} maxWidth={false} >
-      <Header openSideBar={openSideBar} toggleSideBar={toggleSideBar} />
-      <Sidebar openSideBar={openSideBar}/>
-      <Box sx={{ ml: openSideBar ? 12 : 1, mt: 3}}>
-        <DicomUpload refetch={refetch} />
-        <DicomTable loading={loading} error={error} data={data} />
-      </Box>
-    </Container>
+    <Router>
+      <Container  sx={{ paddingLeft: { xs: 0, sm: 0 }, paddingRight: { xs: 0, sm: 0 } }} maxWidth={false} >
+        <Header openSideBar={openSideBar} toggleSideBar={toggleSideBar} />
+        <Sidebar openSideBar={openSideBar}/>
+        <Box sx={{ ml: openSideBar ? 12 : 1, mt: 3}}>
+          <Routes>
+              <Route path="/" element={<DownloadPage />} />
+              <Route path="/upload" element={<UploadPage />} />
+              <Route path="/view" element={<ViewerPage />} />
+              <Route path="/demo" element={<DemoPage />} />
+            </Routes>
+        </Box>
+      </Container>
+    </Router>
+
   );
 }
 
