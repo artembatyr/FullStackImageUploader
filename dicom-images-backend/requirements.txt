@@ -8,3 +8,5 @@ pydicom
 pillow
 numpy
 graphene-django
+requests
+python-dotenv

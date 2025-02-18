@@ -1,6 +1,6 @@
 # FullStackImageUploader
 
-This project is a full-stack DICOM file upload and viewing system using Django REST Framework (DRF) with GraphQL for the backend and React with Apollo Client for the frontend. It also uses Docker to containerize the application, including a MySQL database.
+This project is a full-stack DICOM file upload and viewing system using Django REST Framework (DRF) with GraphQL for the backend and React with Apollo Client for the frontend. It also uses Docker to containerize the application, including a MySQL database. Also you can analyze uploaded images with OpenAi API.
 
 ## Project Structure
 
@@ -109,6 +109,8 @@ DB_HOST=dicom-images-db
 DB_PORT=3306
 
 FRONTEND_PORT=3000
+
+OPENAI_API_KEY=your_secret_key
 ```
 
 
@@ -135,13 +137,24 @@ MYSQL_ROOT_PASSWORD=root
 DB_PORT=33066
 
 FRONTEND_PORT=3000
+
+OPENAI_API_KEY=your_secret_key
 ```
+
+##  How to create OPENAI_API_KEY:
+1. Sign up to https://auth.openai.com/create-account
+2. Create organisation(Sign up process)
+3. Create API key with the name: "OPENAI_API_KEY" and choose Project name: 'Default project'
+4. Copy your created api key and paste inside your .env files (inside root folder in .env file and in dicom-images-backend folder in .env file). Change 'your_secret_key' string for your key.
+5. Inside https://platform.openai.com/settings/organization/billing/overview. Put 5$ to your account(minimum amount to start using OpenAi API).
+6. Now you can analyse your uploaded DICOM images in this app.
 
 ## API Endpoints
 
 - **GraphQL Playground**: `http://localhost:8000/graphql`
 - **DICOM Upload**: `POST /api/upload`
 - **Fetch DICOM Files**: `GET /api/media/dicom_images`
+- **Analyze Images**: `POST /api/analyze-image/`
 
 ## Troubleshooting
 

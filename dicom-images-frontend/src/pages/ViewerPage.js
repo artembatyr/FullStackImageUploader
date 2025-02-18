@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useQuery, gql } from "@apollo/client";
-import { Box, Typography, Grid2 } from "@mui/material";
+import { Box, Typography, Grid2, Button, CircularProgress } from "@mui/material";
+import axios from "axios";
 
 const GET_DICOM_FILES = gql`
   query {
@@ -16,10 +17,32 @@ const GET_DICOM_FILES = gql`
 
 const ViewerPage = () => {
   const { data } = useQuery(GET_DICOM_FILES);
-  const [selectedImage, setSelectedImage] = useState(`${process.env.REACT_APP_BACKEND_URL}/api/media/dicom_images/${data.dicomFiles[0].id}.png` || null);
+  const [selectedImage, setSelectedImage] = useState(
+    `${process.env.REACT_APP_BACKEND_URL}/api/media/dicom_images/${data.dicomFiles[0].id}.png` || null
+  );
+  const [analysisResult, setAnalysisResult] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleImageClick = (imageUrl) => {
     setSelectedImage(imageUrl);
+    setAnalysisResult(null);
+  };
+
+  const handleAnalyzeImage = async () => {
+    if (!selectedImage) return;
+
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/analyze-image/`,
+        { image_path: selectedImage }
+      );
+      setAnalysisResult(response.data.analysis_result.choices[0].message.content);
+    } catch (error) {
+      console.error("Error analyzing image:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -78,22 +101,43 @@ const ViewerPage = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          width: "82%",
-          height: "87vh",
+          width: "81%",
+          height: "85vh",
           background: "black",
           padding: 2,
+          flexDirection: "column",
         }}
       >
         {selectedImage ? (
-          <img
-            src={selectedImage}
-            alt="Selected DICOM"
-            style={{
-              maxWidth: "100%",
-              borderRadius: 4,
-              boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)",
-            }}
-          />
+          <>
+            <Button
+              variant="contained"
+              sx={{ marginTop: 0, zIndex: 1, position: "absolute", top: '15%', left: '55%' }}
+              onClick={handleAnalyzeImage}
+              disabled={loading}
+            >
+              {loading ? <CircularProgress size={24} color="inherit" /> : "Analyze Image"}
+            </Button>
+            <img
+              src={selectedImage}
+              alt="Selected DICOM"
+              style={{
+                maxWidth: "100%",
+                position: 'absolute',
+                top: '15%',
+                borderRadius: 4,
+                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)",
+              }}
+            />
+            {analysisResult && (
+              <Box sx={{ position: "absolute", top: '70%', color: "white", width: "150px"}}>
+                <Typography variant="h6">Analysis Result:</Typography>
+                <Box sx={{ position: "absolute", left: -500}}>
+                  <pre>{analysisResult}</pre>
+                </Box>
+              </Box>
+            )}
+          </>
         ) : (
           <Typography variant="h6" sx={{ color: "white" }}>
             Select an image to view

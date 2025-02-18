@@ -1,9 +1,12 @@
 import numpy as np
 import pydicom
 import base64
+import requests
 import io
 import os
 import logging
+import dotenv
+from urllib.parse import urlparse
 from datetime import datetime
 from PIL import Image
 from django.conf import settings
@@ -13,6 +16,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
 from .models import DicomFile
 from .serializers import DicomFileSerializer
+
+dotenv.load_dotenv()
 
 class DicomUploadView(APIView):
     parser_classes = (MultiPartParser, FormParser)
@@ -92,3 +97,53 @@ class CustomGraphQLView(GraphQLView):
     def dispatch(self, *args, **kwargs):
         logger.debug("Handling GraphQL request")
         return super().dispatch(*args, **kwargs)
+
+
+class AnalyzeImageView(APIView):
+    def post(self, request, *args, **kwargs):
+        image_url = request.data.get("image_path")
+        if not image_url:
+            return Response({"error": "No image path provided"}, status=400)
+
+        image_path = '/' + image_url.split('/media/', 1)[-1]
+        full_image_path = settings.MEDIA_ROOT + image_path
+
+        if not os.path.exists(full_image_path):
+            return Response({"error": "Image file not found"}, status=404)
+        
+        
+        try:
+            with open(full_image_path, "rb") as image_file:
+                encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
+
+            headers = {
+                "Authorization": f"Bearer {os.getenv('OPENAI_API_KEY')}",
+                "Content-Type": "application/json"
+            }
+            data = {
+                "model": "chatgpt-4o-latest",
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "text", "text": "Describe this medical image in detail. Make suggestions if there are problems. A new line should be every 140 characters."},
+                            {"type": "image", "image": encoded_image}
+                        ]
+                    }
+                ],
+                "max_tokens": 500
+            }
+
+            response = requests.post("https://api.openai.com/v1/chat/completions", json=data, headers=headers)
+            response_data = response.json()
+
+            analyzed_image_url = f"{settings.MEDIA_URL}{image_path}"
+
+            return Response({
+                "analysis_result": response_data,
+                "image_url": analyzed_image_url
+            })
+        
+        except Exception as e:
+            logger.error(f"Error analyzing image: {str(e)}")
+            return Response({"error": "Failed to analyze image"}, status=500)
