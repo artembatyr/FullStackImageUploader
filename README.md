@@ -162,6 +162,10 @@ OPENAI_API_KEY=your_secret_key
 - **Port conflicts**: Change ports in `docker-compose.yml` if needed
 - **Frontend not updating**: Restart the frontend with `npm start`
 
+##  How upload and analyse DICOM files?
+1. Drag and drop any DICOM files from folder: 'DICOM_FILES_FOR_UPLOAD' to the box inside your app.
+2. Then you can go and view your uploaded files and click analyse image button.
+
 ## 📜 License
 
 MIT License
